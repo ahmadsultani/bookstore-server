@@ -43,11 +43,8 @@ const updateBook = async (req, session) => {
   const { id } = req.params;
   const { title, author, qty, price } = req.body;
 
-  const check = await Book.findOne({ _id: id });
-
-  if (!check) {
-    throw new NotFoundError(`Book with id '${id}' not found`);
-  }
+  // checking book exist or not
+  await getOneBook(req);
 
   // check if title and author is already exist
   const duplicate = await Book.findOne({ title, author, _id: { $ne: id } });

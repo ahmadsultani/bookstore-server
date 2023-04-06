@@ -1,4 +1,4 @@
-const db = require("../../../db");
+const mongoose = require("mongoose");
 const {
   createBook,
   getOneBook,
@@ -8,8 +8,9 @@ const {
 } = require("../../../service/mongoose/book");
 
 const index = async (req, res, next) => {
+  const session = await mongoose.startSession();
   try {
-    const result = await getAllBook(req);
+    const result = await getAllBook(session);
 
     res.status(200).json({ data: result });
   } catch (error) {
@@ -18,7 +19,10 @@ const index = async (req, res, next) => {
 };
 
 const getOne = async (req, res, next) => {
+  const session = await mongoose.startSession();
   try {
+    session.startTransaction();
+
     const result = await getOneBook(req);
 
     res.status(200).json({ data: result });
@@ -28,7 +32,7 @@ const getOne = async (req, res, next) => {
 };
 
 const create = async (req, res, next) => {
-  const session = await db.startSession();
+  const session = await mongoose.startSession();
   try {
     await session.startTransaction();
 
@@ -48,9 +52,9 @@ const create = async (req, res, next) => {
 };
 
 const update = async (req, res, next) => {
-  const session = await db.startSession();
+  const session = await mongoose.startSession();
   try {
-    await session.startTransaction();
+    session.startTransaction();
 
     const result = await updateBook(req, session);
 
@@ -66,11 +70,11 @@ const update = async (req, res, next) => {
 };
 
 const destroy = async (req, res, next) => {
-  const session = await db.startSession();
+  const session = await mongoose.startSession();
   try {
-    await session.startTransaction();
+    session.startTransaction();
 
-    const result = await deleteBook(req, session)
+    const result = await deleteBook(req, session);
 
     res.status(200).json({ data: result });
 

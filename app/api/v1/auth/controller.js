@@ -1,10 +1,14 @@
-const db = require("../../../db");
+const mongoose = require("mongoose");
+
 const { signinUser, signupUser } = require("../../../service/mongoose/auth");
 const { StatusCodes } = require("http-status-codes");
 
 const login = async (req, res, next) => {
+  const session = await mongoose.startSession();
   try {
-    const result = await signinUser(req);
+    session.startTransaction();
+
+    const result = await signinUser(req, session);
 
     res.status(StatusCodes.CREATED).json({ data: { token: result } });
 
@@ -15,9 +19,9 @@ const login = async (req, res, next) => {
 };
 
 const signup = async (req, res, next) => {
-  const session = await db.startSession();
+  const session = await mongoose.startSession();
   try {
-    await session.startTransaction();
+    session.startTransaction();
 
     const result = await signupUser(req, session);
 
