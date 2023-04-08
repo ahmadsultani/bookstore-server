@@ -9,6 +9,7 @@ const {
   topupUser,
   checkoutUser,
   deleteUser,
+  getProfileUser
 } = require("../../../service/mongoose/user");
 
 const index = async (req, res, next) => {
@@ -121,6 +122,23 @@ const checkout = async (req, res, next) => {
   }
 };
 
+const profile = async (req, res, next) => {
+  const session = await mongoose.startSession();
+  try {
+    session.startTransaction();
+
+    const result = await getProfileUser(req, session);
+
+    res.status(StatusCodes.ACCEPTED).json({ data: result });
+    await session.commitTransaction();
+  } catch (error) {
+    await session.abortTransaction();
+    next(error);
+  } finally {
+    await session.endSession();
+  }
+};
+
 module.exports = {
   index,
   getOne,
@@ -129,4 +147,5 @@ module.exports = {
   destroy,
   topup,
   checkout,
+  profile
 };

@@ -125,6 +125,18 @@ const topupUser = async (req, session) => {
   return result;
 };
 
+const getProfileUser = async (req, session) => {
+  const { id } = req.user;
+
+  const result = await User.findOne({ _id: id }).session(session);
+
+  if (!result) {
+    throw new NotFoundError(`User with id '${id}' not found`);
+  }
+
+  return result;
+};
+
 const deleteUser = async (req, session) => {
   const { id } = req.params;
 
@@ -147,4 +159,5 @@ module.exports = {
   topupUser,
   deleteUser,
   checkoutUser,
+  getProfileUser,
 };

@@ -8,6 +8,7 @@ const {
   checkout,
   destroy,
   topup,
+  profile
 } = require("./controller");
 const { authenticateUser } = require("../../../middleware/auth");
 
@@ -19,6 +20,7 @@ router.delete("/user/:id", destroy);
 
 router.put("/topup", authenticateUser, topup);
 router.put("/checkout", authenticateUser, checkout);
+router.get("/profile", authenticateUser, profile);
 
 router.delete("/user/:id", destroy);
 
