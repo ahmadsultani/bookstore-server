@@ -25,7 +25,7 @@ const createUser = async (req, session) => {
   const { name, email, password, confirmPassword } = req.body;
 
   if (password !== confirmPassword) {
-    throw new BadRequestError("Password not match");
+    throw new BadRequestError("Password not match"); 
   }
 
   const duplicate = await User.findOne({ email }).session(session);

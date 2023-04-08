@@ -27,6 +27,15 @@ const signinUser = async (req) => {
 
   const token = createJWT({ payload: createTokenUser(result) });
 
+  req.user = {
+    id: result._id,
+    name: result.name,
+    email: result.email,
+    balance: result.balance,
+  };
+
+  console.log(req.user);
+
   return token;
 };
 
@@ -50,5 +59,5 @@ const signupUser = async (req, session) => {
 
 module.exports = {
   signinUser,
-  signupUser
+  signupUser,
 };
