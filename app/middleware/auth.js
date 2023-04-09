@@ -6,7 +6,7 @@ const authenticateUser = async (req, res, next) => {
     const authToken = req.headers.authorization;
 
     if (!authToken) {
-      throw new UnauthenticatedError("Token is missing");
+      throw new UnauthenticatedError("Unauthenticated");
     }
 
     if (!authToken.startsWith("Bearer ")) {

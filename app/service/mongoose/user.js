@@ -92,12 +92,12 @@ const checkoutUser = async (req, session) => {
   }
 
   if (check.balance < checkoutNominal) {
-    throw new BadRequestError("Balance is not enough");
+    throw new BadRequestError("Balance is not enough, balance: IDR "+check.balance);
   }
 
   const bookResult = await Book.updateOne(
     { _id: book_id },
-    { $inc: { stock: -totalBook } },
+    { $inc: { qty: -totalBook } },
   ).session(session);
 
   const userResult = await User.updateOne(
